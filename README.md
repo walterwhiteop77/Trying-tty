@@ -1,14 +1,11 @@
-# TeleBotIndex - Webhook Deploy
+# TeleBotIndex - Deploy-ready (Webhook)
 
-## Render Deployment
+This repo has been patched to run in webhook mode on Render (or any PaaS).
 
-1. Create a new Web Service on [Render](https://render.com/).
-2. Upload this repo or connect to your GitHub repo.
-3. Add Environment Variables:
-   - `BOT_TOKEN`: Your Telegram bot token
-   - `RENDER_EXTERNAL_URL`: The URL Render assigns (e.g. https://your-app.onrender.com)
-   - `PORT`: 10000 (Render default)
-4. Build Command: `pip install -r requirements.txt`
-5. Start Command: `python main.py` (already in Procfile)
-6. Deploy 🚀
+Important env vars to set in Render:
+- BOT_TOKEN
+- LOG_CHANNEL_ID (optional)
+- RENDER_EXTERNAL_URL (Render provides this automatically)
+
+Before deploying on Render, clear build cache and redeploy so new requirements are installed.
 

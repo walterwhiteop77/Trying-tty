@@ -2,11 +2,13 @@ services:
   - type: web
     name: telebot
     env: python
-    plan: free   # or starter/pro depending on your account
+    plan: free
     buildCommand: pip install -r requirements.txt
     startCommand: python main.py
     envVars:
       - key: BOT_TOKEN
         sync: false
       - key: LOG_CHANNEL_ID
+        sync: false
+      - key: RENDER_EXTERNAL_URL
         sync: false
