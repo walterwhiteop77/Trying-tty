@@ -67,6 +67,16 @@ class VideoBot:
         self.client = None
         self.db = None
 
+    def send_log(self, message: str):
+        """Send a log message to the log channel."""
+        if self.log_channel_id:
+            try:
+                from telegram import Bot
+                bot = Bot(token=self.bot_token)
+                bot.send_message(chat_id=self.log_channel_id, text=message)
+            except Exception as e:
+                logger.error(f"Failed to send log message: {e}")
+
     def init_database(self):
         """Initialize MongoDB connection and collections"""
         try:
@@ -1107,6 +1117,7 @@ class VideoBot:
         application.add_error_handler(self.error_handler)
 
         # Run the bot with restart logging
+        self.send_log('✅ Bot has started successfully.')
         try:
             application.run_polling(drop_pending_updates=True)
         finally:
