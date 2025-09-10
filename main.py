@@ -21,7 +21,6 @@ class VideoBot:
         if self.log_channel_id:
             try:
                 from telegram import Bot
-
                 bot = Bot(token=self.bot_token)
                 await bot.send_message(chat_id=self.log_channel_id, text=message)
             except Exception as e:
@@ -36,12 +35,17 @@ class VideoBot:
 
         application.post_init = on_startup
 
-        # Run in webhook mode
+        # Always run in webhook mode
+        port = int(os.environ.get("PORT", 10000))
+        external_url = os.environ.get("RENDER_EXTERNAL_URL")
+        if not external_url:
+            raise RuntimeError("Missing RENDER_EXTERNAL_URL environment variable")
+
         await application.run_webhook(
             listen="0.0.0.0",
-            port=int(os.environ.get("PORT", 10000)),
+            port=port,
             url_path=self.bot_token,
-            webhook_url=f"{os.environ['RENDER_EXTERNAL_URL']}/{self.bot_token}",
+            webhook_url=f"{external_url}/{self.bot_token}",
         )
 
 
@@ -49,6 +53,8 @@ if __name__ == "__main__":
     token = os.getenv("BOT_TOKEN")
     log_channel = os.getenv("LOG_CHANNEL_ID")
 
-    bot = VideoBot(token, log_channel)
+    if not token:
+        raise RuntimeError("BOT_TOKEN is required")
 
+    bot = VideoBot(token, log_channel)
     asyncio.run(bot.run())
