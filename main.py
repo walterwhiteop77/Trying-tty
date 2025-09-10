@@ -16,7 +16,7 @@ class VideoBot:
         self.bot_token = token
         self.log_channel_id = log_channel_id
 
-    async async def send_log(self, message: str):
+    async def send_log(self, message: str):
         if self.log_channel_id:
             try:
                 from telegram import Bot
