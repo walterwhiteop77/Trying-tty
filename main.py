@@ -91,7 +91,7 @@ class VideoBot:
                     expireAfterSeconds=3600)  # Expire after 1 hour
 
             # Load bot settings
-            self.load_bot_settings()
+#             self.load_bot_settings()
 
             logger.info("✅ MongoDB connected successfully")
             return True
