@@ -1,6 +1,5 @@
 import logging
 import os
-import asyncio
 
 from telegram.ext import Application
 
@@ -26,7 +25,7 @@ class VideoBot:
             except Exception as e:
                 logger.error(f"Failed to send log message: {e}")
 
-    async def run(self):
+    def run(self):
         application = Application.builder().token(self.bot_token).build()
         register_handlers(application, self)
 
@@ -35,13 +34,13 @@ class VideoBot:
 
         application.post_init = on_startup
 
-        # Always run in webhook mode
         port = int(os.environ.get("PORT", 10000))
         external_url = os.environ.get("RENDER_EXTERNAL_URL")
         if not external_url:
             raise RuntimeError("Missing RENDER_EXTERNAL_URL environment variable")
 
-        await application.run_webhook(
+        # Direct call, no asyncio.run()
+        application.run_webhook(
             listen="0.0.0.0",
             port=port,
             url_path=self.bot_token,
@@ -57,4 +56,4 @@ if __name__ == "__main__":
         raise RuntimeError("BOT_TOKEN is required")
 
     bot = VideoBot(token, log_channel)
-    asyncio.run(bot.run())
+    bot.run()
